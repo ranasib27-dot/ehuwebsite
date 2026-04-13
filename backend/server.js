@@ -16,9 +16,7 @@ const { authMiddleware } = require('./middleware/auth');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log("Server running on port " + PORT);
-});
+
 
 // ── CORS (au cas où on utilise quand même Live Server) ─────────────
 app.use(cors({ origin: '*', methods: ['GET','POST','PUT','PATCH','DELETE'], allowedHeaders: ['Content-Type','Authorization'] }));
@@ -55,5 +53,19 @@ app.use((err, req, res, next) => {
   console.error('Erreur:', err.message);
   res.status(500).json({ error: 'Erreur interne du serveur' });
 });
-
+app.listen(PORT, () => {
+  console.log('');
+  console.log('╔════════════════════════════════════════════════════════╗');
+  console.log('║   ✓  EHU ORAN — Serveur démarré                       ║');
+  console.log('╠════════════════════════════════════════════════════════╣');
+  console.log(║   Ouvrir dans le navigateur :                          ║);
+  console.log(║   → http://localhost:${PORT}                              ║);
+  console.log('║                                                        ║');
+  console.log('║   (Plus besoin de Live Server !)                       ║');
+  console.log('╠════════════════════════════════════════════════════════╣');
+  console.log('║   Médecin  : dr.karim@ehu-oran.dz    / med123         ║');
+  console.log('║   IT Admin : it.support@ehu-oran.dz  / it123          ║');
+  console.log('╚════════════════════════════════════════════════════════╝');
+  console.log('');
+});
 // ── Démarrage ──────────────────────────────────────────────────────
