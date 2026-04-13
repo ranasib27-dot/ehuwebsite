@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EHU Oran — Connexion</title>
+  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="/styles/login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="login-body">
+  <div class="login-bg-grid" aria-hidden="true"></div>
+  <div class="login-bg-glow" aria-hidden="true"></div>
+  <main class="login-card">
+    <header class="ehu-header">
+      <div class="ehu-emblem">
+  <img src="/images/ehu.jpg" alt="Logo EHU Oran" class="ehu-logo">
+</div>
+      <h1 class="ehu-name">EHU d'Oran</h1>
+      <p class="ehu-tagline">Établissement Hospitalo-Universitaire</p>
+      <div class="ehu-divider">
+        <span class="divider-line"></span>
+        <span class="divider-label">Portail Support IT</span>
+        <span class="divider-line"></span>
+      </div>
+    </header>
+    <div class="alert alert-error" id="login-error" hidden>
+      <span class="alert-icon">!</span>
+      <span id="login-error-msg">Email ou mot de passe incorrect.</span>
+    </div>
+    <form id="login-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="email">Adresse email institutionnelle</label>
+        <input class="form-input" type="email" id="email" placeholder="prenom.nom@ehu-oran.dz" autocomplete="email" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="password">Mot de passe</label>
+        <div class="input-wrapper">
+          <input class="form-input" type="password" id="password" placeholder="••••••••" autocomplete="current-password" required/>
+          <button type="button" class="toggle-password" id="toggle-pwd">👁</button>
+        </div>
+      </div>
+      <button type="submit" class="btn-login" id="login-btn">
+        <span class="btn-text">Se connecter</span>
+        <span class="btn-loader" hidden><span class="spinner"></span> Vérification...</span>
+      </button>
+    </form>
+    <div class="login-hint">
+      <p class="hint-title">Comptes de démonstration</p>
+      <div class="hint-row"><span class="hint-role doctor-role">Médecin</span><code>dr.karim@ehu-oran.dz / med123</code></div>
+      <div class="hint-row"><span class="hint-role it-role">IT Admin</span><code>it.support@ehu-oran.dz / it123</code></div>
+    </div>
+    <footer class="login-footer"><p>© 2026 EHU Oran — Direction des Systèmes d'Information</p></footer>
+  </main>
+  <script src="/js/api.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>
+

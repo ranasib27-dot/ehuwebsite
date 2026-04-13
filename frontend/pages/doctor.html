@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EHU Oran — Espace Médecin</title>
+  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="/styles/doctor.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="topbar" role="banner">
+    <div class="topbar-brand">
+      <div class="topbar-emblem">
+        <img src="/images/ehu.jpg" alt="Logo EHU Oran" class="ehu-logo">
+      </div>
+      <div class="topbar-info">
+        <span class="topbar-name" id="user-name">Chargement...</span>
+        <span class="topbar-role" id="user-dept">Service médical</span>
+      </div>
+    </div>
+    <div class="topbar-center"><span class="topbar-title">Support IT — EHU Oran</span></div>
+    <nav class="topbar-actions">
+      <span class="tickets-count-badge" id="my-count">0</span>
+      <button class="btn-secondary" id="btn-logout">Déconnexion</button>
+    </nav>
+  </header>
+
+  <main class="page-content" role="main">
+    <div class="container">
+
+
+      <!-- ════ BASE DE CONNAISSANCES ════ -->
+      <section class="kb-section" aria-label="Base de connaissances">
+        <div class="kb-header">
+          <div class="kb-header-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 6h12M4 10h8M4 14h6" stroke-linecap="round"/>
+              <circle cx="15" cy="14" r="3.5"/>
+              <path d="M15 12.5v1.5l1 1" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="kb-title">Base de connaissances — Consultez avant d'ouvrir un ticket</div>
+            <div class="kb-sub">Votre problème a peut-être déjà été résolu. Tapez quelques mots pour chercher.</div>
+          </div>
+        </div>
+        <div class="kb-search-wrap">
+          <input class="kb-search-input" id="kb-input" type="search"
+            placeholder="Ex: imprimante hors ligne, mot de passe oublié, wifi..."
+            autocomplete="off" aria-label="Rechercher dans la base de connaissances"/>
+          <button class="kb-search-btn" id="kb-search-btn" title="Rechercher">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="9" cy="9" r="6"/>
+              <path d="M13.5 13.5L17 17" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="kb-results" id="kb-results" aria-live="polite"></div>
+      </section>
+
+      <!-- Tickets prédéfinis -->
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Tickets prédéfinis <span class="badge-quick">Envoi rapide</span></h2>
+            <p class="section-sub">Cliquez sur un ticket correspondant à votre problème — envoyé immédiatement à l'équipe IT.</p>
+          </div>
+        </div>
+
+        <!-- Filtres catégorie avec icônes SVG -->
+        <div class="cat-filters" role="tablist">
+
+          <button class="cat-btn active" data-cat="all">
+            <svg class="cat-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="2" width="7" height="7" rx="1.5"/>
+              <rect x="11" y="2" width="7" height="7" rx="1.5"/>
+              <rect x="2" y="11" width="7" height="7" rx="1.5"/>
+              <rect x="11" y="11" width="7" height="7" rx="1.5"/>
+            </svg>
+            Tous
+          </button>
+
+          <button class="cat-btn" data-cat="soft">
+            <svg class="cat-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="3" width="16" height="11" rx="2"/>
+              <path d="M6 14v2M14 14v2M4 16h12"/>
+              <path d="M7 8l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Logiciel
+          </button>
+
+          <button class="cat-btn" data-cat="hard">
+            <svg class="cat-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="4" width="14" height="10" rx="1.5"/>
+              <path d="M7 18h6M10 14v4" stroke-linecap="round"/>
+              <circle cx="10" cy="9" r="2.5"/>
+            </svg>
+            Matériel
+          </button>
+
+          <button class="cat-btn" data-cat="net">
+            <svg class="cat-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M10 15a1 1 0 100-2 1 1 0 000 2z" fill="currentColor" stroke="none"/>
+              <path d="M6.5 12.5a5 5 0 017 0" stroke-linecap="round"/>
+              <path d="M3.5 9.5a9 9 0 0113 0" stroke-linecap="round"/>
+              <path d="M1 6.5a13 13 0 0118 0" stroke-linecap="round"/>
+            </svg>
+            Réseau
+          </button>
+
+        </div>
+
+        <div class="predef-grid" id="predef-grid" role="list">
+          <div class="ticket-skeleton"></div>
+          <div class="ticket-skeleton"></div>
+          <div class="ticket-skeleton"></div>
+          <div class="ticket-skeleton"></div>
+          <div class="ticket-skeleton"></div>
+          <div class="ticket-skeleton"></div>
+        </div>
+      </section>
+
+      <div class="or-divider">
+        <span class="or-line"></span>
+        <span class="or-text">ou créer un ticket personnalisé</span>
+        <span class="or-line"></span>
+      </div>
+
+      <!-- Formulaire manuel + ML -->
+      <section class="section">
+        <div class="manual-card">
+          <div class="manual-header">
+            <h2 class="section-title" style="font-size:17px">Nouveau ticket personnalisé</h2>
+            <div class="ml-indicator">
+              <span class="ml-dot"></span>
+              <span class="ml-label">IA active — analyse en temps réel</span>
+            </div>
+          </div>
+          <form id="manual-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="ticket-title">Titre du problème *</label>
+                <input class="form-input" type="text" id="ticket-title"
+                  placeholder="Ex: L'imprimante affiche une erreur..." required autocomplete="off"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ticket-urgency">Urgence</label>
+                <select class="form-select" id="ticket-urgency">
+                  <option value="low">Basse</option>
+                  <option value="medium" selected>Normale</option>
+                  <option value="high">Haute</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ticket-desc">Description</label>
+              <textarea class="form-textarea" id="ticket-desc"
+                placeholder="Décrivez le problème en détail..." rows="4"></textarea>
+            </div>
+
+            <!-- Suggestions ML -->
+            <div class="ml-box" id="ml-box" hidden>
+              <div class="ml-box-header">
+                <svg class="ml-icon-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="10" cy="10" r="8"/>
+                  <path d="M10 6v4l2.5 2.5" stroke-linecap="round"/>
+                  <path d="M6 3.5C7.2 2.6 8.5 2 10 2" stroke-linecap="round"/>
+                </svg>
+                <span class="ml-title">Analyse IA — Catégorie détectée</span>
+                <span class="ml-confidence" id="ml-confidence"></span>
+              </div>
+              <div class="ml-suggestions" id="ml-suggestions"></div>
+              <p class="ml-hint-text">Cliquez pour appliquer la catégorie automatiquement</p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="ticket-category">
+                Catégorie
+                <span class="label-hint">(détectée automatiquement par l'IA)</span>
+              </label>
+              <select class="form-select" id="ticket-category">
+                <option value="soft">Logiciel / Application</option>
+                <option value="hard">Matériel / Équipement</option>
+                <option value="net">Réseau / Internet</option>
+              </select>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-primary" id="submit-btn">
+                <span class="btn-text">Soumettre le ticket</span>
+                <span class="btn-loader" hidden><span class="spinner"></span> Envoi...</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Mes tickets -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title" style="font-size:17px">Mes tickets</h2>
+          <button class="btn-ghost" id="btn-refresh-tickets">↻ Actualiser</button>
+        </div>
+        <div id="my-tickets-list" role="list">
+          <div class="empty-state" id="tickets-empty">Aucun ticket créé pour le moment.</div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="alert" aria-hidden="true">
+    <span class="toast-icon" id="toast-icon">✓</span>
+    <span class="toast-msg" id="toast-msg"></span>
+  </div>
+
+  <div class="modal-overlay" id="modal" hidden>
+    <div class="modal-box">
+      <h3 class="modal-title" id="modal-title"></h3>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-actions">
+        <button class="btn-secondary" id="modal-cancel">Annuler</button>
+        <button class="btn-primary" id="modal-confirm">Confirmer l'envoi</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/doctor.js"></script>
+</body>
+</html>
