@@ -16,6 +16,9 @@ const { authMiddleware } = require('./middleware/auth');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log("Server running on port " + PORT);
+});
 
 // ── CORS (au cas où on utilise quand même Live Server) ─────────────
 app.use(cors({ origin: '*', methods: ['GET','POST','PUT','PATCH','DELETE'], allowedHeaders: ['Content-Type','Authorization'] }));
