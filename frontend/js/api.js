@@ -4,7 +4,7 @@
 // ╚══════════════════════════════════════════════════════════════════╝
 
 // URL de base du backend — changer si déployé sur un serveur distant
-const API_BASE = 'https://ehu-4.onrender.com/';
+const API_BASE = 'https://ehu-4.onrender.com/api';
 
 // ══════════════════════════════════════════════════════════════════
 //  GESTION DU TOKEN JWT (stocké dans localStorage)
