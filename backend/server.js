@@ -44,15 +44,12 @@ app.use('/api/ml',      authMiddleware, mlRoutes);
 app.use('/api/kb',      authMiddleware, kbRoutes);
 
 // ── Fallback : toutes les routes non-API → index.html ──────────────
-app.get('*', (req, res) => {
-  // Si c'est une route API inconnue, retourner 404 JSON
+app.use((req, res) => {
   if (req.path.startsWith('/api/')) {
-    return res.status(404).json({ error: `Endpoint ${req.path} introuvable` });
+    return res.status(404).json({ error: 'Endpoint introuvable' });
   }
-  // Sinon servir le frontend
   res.sendFile(path.join(FRONTEND_PATH, 'index.html'));
 });
-
 // ── Erreurs ────────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error('Erreur:', err.message);
@@ -60,18 +57,3 @@ app.use((err, req, res, next) => {
 });
 
 // ── Démarrage ──────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log('');
-  console.log('╔════════════════════════════════════════════════════════╗');
-  console.log('║   ✓  EHU ORAN — Serveur démarré                       ║');
-  console.log('╠════════════════════════════════════════════════════════╣');
-  console.log(`║   Ouvrir dans le navigateur :                          ║`);
-  console.log(`║   → http://localhost:${PORT}                              ║`);
-  console.log('║                                                        ║');
-  console.log('║   (Plus besoin de Live Server !)                       ║');
-  console.log('╠════════════════════════════════════════════════════════╣');
-  console.log('║   Médecin  : dr.karim@ehu-oran.dz    / med123         ║');
-  console.log('║   IT Admin : it.support@ehu-oran.dz  / it123          ║');
-  console.log('╚════════════════════════════════════════════════════════╝');
-  console.log('');
-});
