@@ -1,33 +1,54 @@
-/* styles/doctor.css — Page Médecin */
+/* ══════════════════════════════════════════════════════════════
+   styles/doctor.css — Page Médecin (Tailwind-ready)
+   ══════════════════════════════════════════════════════════════ */
 
-/* Compteur de tickets dans la topbar */
+/* ── Badge tickets (topbar) ──────────────────────────────────── */
+/*
+   Tailwind : bg-[rgba(106,127,232,0.15)] text-[--gold2]
+              border border-[rgba(106,127,232,0.3)] rounded-full
+              px-3 py-1 text-xs font-semibold
+*/
 .tickets-count-badge {
-  background: rgba(201,168,76,0.15); color: var(--gold2);
-  border: 1px solid rgba(201,168,76,0.3); border-radius: 20px;
+  background: rgba(106,127,232,0.15); color: var(--gold2);
+  border: 1px solid rgba(106,127,232,0.3); border-radius: 20px;
   padding: 4px 12px; font-size: 12px; font-weight: 600;
 }
 
-/* ══ Filtres catégorie ══ */
-.cat-filters {
-  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px;
-}
+/* ── Filtres catégorie ───────────────────────────────────────── */
+/*
+   Tailwind wrapper : flex gap-2 flex-wrap mb-4
+   Tailwind btn     : bg-transparent border border-black/8 rounded-full
+                      px-4 py-1.5 text-[--text2] text-sm flex items-center gap-1.5
+                      transition hover:bg-[rgba(53,60,138,0.1)] hover:border-[--gold]
+                      hover:text-[--gold]
+*/
+.cat-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
 .cat-btn {
   background: transparent; border: 1px solid var(--border);
   border-radius: 20px; padding: 7px 16px;
   color: var(--text2); font-family: inherit; font-size: 13px;
-  transition: all var(--transition); display: flex; align-items: center; gap: 6px;
+  transition: all var(--transition);
+  display: flex; align-items: center; gap: 7px;
 }
 .cat-btn:hover, .cat-btn.active {
-  background: rgba(201,168,76,0.1); border-color: var(--gold); color: var(--gold);
+  background: rgba(53,60,138,0.1); border-color: var(--gold); color: var(--gold);
 }
 .cat-btn.active { font-weight: 600; }
+.cat-icon { width: 15px; height: 15px; flex-shrink: 0; stroke: currentColor; transition: stroke var(--transition); }
 
-/* ══ Grille tickets prédéfinis ══ */
+/* ── Grille tickets prédéfinis ──────────────────────────────── */
+/*
+   Tailwind : grid grid-cols-2 gap-3
+              sm:grid-cols-2 md:grid-cols-3
+*/
 .predef-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 12px;
 }
+/* Mobile : 2 colonnes serrées */
+@media (max-width: 560px) { .predef-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 360px) { .predef-grid { grid-template-columns: 1fr; } }
 
 /* Carte ticket prédéfini */
 .predef-ticket-card {
@@ -37,7 +58,6 @@
   position: relative; overflow: hidden;
   display: flex; flex-direction: column; gap: 10px;
 }
-/* Barre colorée en haut au hover */
 .predef-ticket-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
   background: transparent; transition: background var(--transition);
@@ -49,33 +69,44 @@
 .predef-ticket-card:hover::before {
   background: linear-gradient(90deg, var(--gold), var(--gold2));
 }
+/* Mobile : pas de transform (évite le lag tactile) */
+@media (max-width: 640px) {
+  .predef-ticket-card:hover { transform: none; }
+  .predef-ticket-card:active { background: var(--card2); border-color: var(--gold); }
+}
 
-/* Icône catégorie */
+/* Icônes catégorie */
 .ticket-cat-badge {
-  width: 34px; height: 34px; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center; font-size: 16px;
+  width: 36px; height: 36px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.badge-soft { background: rgba(26,155,138,0.12); }
-.badge-hard { background: rgba(201,168,76,0.10); }
-.badge-net  { background: rgba(26,95,168,0.12); }
+.ticket-cat-badge svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.badge-soft { background: rgba(26,155,138,0.12); color: #1a9b8a; }
+.badge-hard { background: rgba(201,168,76,0.12);  color: #c9a84c; }
+.badge-net  { background: rgba(74,159,224,0.12);  color: #4a9fe0; }
 
-.predef-ticket-title {
-  font-size: 13px; color: var(--text); font-weight: 500; line-height: 1.5; flex: 1;
-}
-.predef-ticket-footer {
-  display: flex; align-items: center; justify-content: space-between;
-}
-.send-hint {
-  font-size: 11px; color: var(--text3); opacity: 0;
-  transition: opacity var(--transition);
-}
+.predef-ticket-title { font-size: 13px; color: var(--text); font-weight: 500; line-height: 1.5; flex: 1; }
+.predef-ticket-footer { display: flex; align-items: center; justify-content: space-between; }
+.send-hint { font-size: 11px; color: var(--text3); opacity: 0; transition: opacity var(--transition); }
 .predef-ticket-card:hover .send-hint { opacity: 1; }
 
-/* ══ Formulaire manuel ══ */
+/* Badges urgence sans emoji */
+.urg-badge { display: flex; align-items: center; font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 5px; }
+.urg-dot   { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-right: 4px; }
+.urg-high   { background: rgba(192,57,43,0.12);  color: #f08080; }
+.urg-medium { background: rgba(201,168,76,0.10); color: var(--gold2); }
+.urg-low    { background: rgba(26,155,138,0.10); color: var(--teal2); }
+.urg-high   .urg-dot { background: #f08080; }
+.urg-medium .urg-dot { background: var(--gold2); }
+.urg-low    .urg-dot { background: var(--teal2); }
+
+/* ── Formulaire manuel ──────────────────────────────────────── */
 .manual-card {
   background: var(--card); border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: 28px;
 }
+@media (max-width: 560px) { .manual-card { padding: 18px 14px; } }
+
 .manual-header {
   display: flex; align-items: center; justify-content: space-between;
   flex-wrap: wrap; gap: 12px; margin-bottom: 24px;
@@ -84,24 +115,19 @@
 
 /* Indicateur IA */
 .ml-indicator { display: flex; align-items: center; gap: 7px; }
-.ml-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--teal2); animation: pulse 2s infinite; flex-shrink: 0;
-}
+.ml-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal2); animation: pulse 2s infinite; flex-shrink: 0; }
 .ml-label { font-size: 12px; color: var(--teal2); }
 
-/* Box de suggestions ML */
+/* Box suggestions ML */
 .ml-box {
   background: rgba(26,155,138,0.06); border: 1px solid rgba(26,155,138,0.2);
   border-radius: var(--radius); padding: 14px 16px;
   margin-bottom: 14px; animation: slideUp 0.3s ease;
 }
 .ml-box[hidden] { display: none; }
-.ml-box-header {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
-}
-.ml-icon { font-size: 15px; }
-.ml-title { font-size: 12px; color: var(--teal2); font-weight: 600; letter-spacing: 0.3px; flex: 1; }
+.ml-box-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.ml-icon-svg   { width: 15px; height: 15px; color: var(--teal2); flex-shrink: 0; }
+.ml-title      { font-size: 12px; color: var(--teal2); font-weight: 600; letter-spacing: 0.3px; flex: 1; }
 .ml-confidence { font-size: 11px; color: var(--text3); }
 .ml-suggestions { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 8px; }
 .ml-tag {
@@ -109,11 +135,13 @@
   border-radius: 20px; padding: 5px 14px; font-size: 12px; color: var(--teal2);
   cursor: pointer; transition: all var(--transition);
 }
+/* Mobile : tags plus grands pour le toucher */
+@media (max-width: 480px) { .ml-tag { padding: 8px 16px; font-size: 13px; } }
 .ml-tag:hover { background: rgba(26,155,138,0.3); color: #fff; }
 .ml-tag.top-match { border-color: var(--teal2); font-weight: 600; }
 .ml-hint-text { font-size: 11px; color: var(--text3); }
 
-/* ══ Mes tickets ══ */
+/* ── Mes tickets ─────────────────────────────────────────────── */
 .my-ticket-row {
   background: var(--card); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 14px 18px;
@@ -121,72 +149,23 @@
   margin-bottom: 10px; transition: border-color var(--transition);
 }
 .my-ticket-row:hover { border-color: var(--border2); }
-.status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.dot-open     { background: var(--gold);   animation: pulse 2s infinite; }
-.dot-progress { background: var(--teal2);  animation: pulse 2s infinite; }
-.dot-resolved { background: var(--green2); }
-.ticket-info { flex: 1; min-width: 0; }
+
+/* Points de statut */
+.status-dot    { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-open      { background: var(--gold);   animation: pulse 2s infinite; }
+.dot-progress  { background: var(--teal2);  animation: pulse 2s infinite; }
+.dot-resolved  { background: var(--green2); }
+
+.ticket-info   { flex: 1; min-width: 0; }
 .ticket-info h4 {
   font-size: 13px; color: var(--text); font-weight: 500;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .ticket-meta { font-size: 11px; color: var(--text3); margin-top: 3px; }
 
-@media (max-width: 560px) {
-  .predef-grid { grid-template-columns: 1fr 1fr; }
-  .manual-card { padding: 20px; }
-}
-@media (max-width: 360px) {
-  .predef-grid { grid-template-columns: 1fr; }
-}
-
-/* ══ Icônes SVG filtres catégorie ══ */
-.cat-icon {
-  width: 15px; height: 15px; flex-shrink: 0;
-  stroke: currentColor; transition: stroke var(--transition);
-}
-.cat-btn { display: flex; align-items: center; gap: 7px; }
-
-/* ══ Icône SVG dans le box ML ══ */
-.ml-icon-svg {
-  width: 15px; height: 15px; color: var(--teal2); flex-shrink: 0;
-}
-
-/* ══ Icônes SVG dans les cartes tickets prédéfinis ══ */
-.ticket-cat-badge {
-  width: 36px; height: 36px; border-radius: 9px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.ticket-cat-badge svg {
-  width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.5;
-}
-.badge-soft { background: rgba(26,155,138,0.12); color: #1a9b8a; }
-.badge-hard { background: rgba(201,168,76,0.12);  color: #c9a84c; }
-.badge-net  { background: rgba(74,159,224,0.12);  color: #4a9fe0; }
-
-/* ══ Urgence sans emoji — juste un point coloré + texte ══ */
-.urg-dot {
-  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-right: 4px;
-}
-.urg-high   .urg-dot { background: #f08080; }
-.urg-medium .urg-dot { background: var(--gold2); }
-.urg-low    .urg-dot { background: var(--teal2); }
-.urg-badge {
-  display: flex; align-items: center; font-size: 11px; font-weight: 500;
-  padding: 3px 9px; border-radius: 5px;
-}
-.urg-high   { background: rgba(192,57,43,0.12); color: #f08080; }
-.urg-medium { background: rgba(201,168,76,0.10); color: var(--gold2); }
-.urg-low    { background: rgba(26,155,138,0.10); color: var(--teal2); }
-
-/* ══ Statut tickets (sans emoji) ══ */
-.status-indicator {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 12px; font-weight: 500;
-}
-.status-indicator .s-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-}
+/* Statut indicateur (sans emoji) */
+.status-indicator { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; }
+.status-indicator .s-dot { width: 7px; height: 7px; border-radius: 50%; }
 .s-open     .s-dot { background: var(--gold);   animation: pulse 2s infinite; }
 .s-progress .s-dot { background: var(--teal2);  animation: pulse 2s infinite; }
 .s-resolved .s-dot { background: #4fc87a; }
@@ -194,28 +173,22 @@
 .s-progress { color: var(--teal2); }
 .s-resolved { color: #4fc87a; }
 
-/* ══ Catégorie label dans mes tickets (sans emoji) ══ */
-.cat-label {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11px; color: var(--text3);
-}
+/* Catégorie label */
+.cat-label { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text3); }
 .cat-label svg { width: 12px; height: 12px; }
 
-/* ══ Base de Connaissances — barre de recherche ══ */
+/* ── Base de Connaissances ───────────────────────────────────── */
 .kb-section {
-  background: var(--card);
-  border: 1px solid var(--border2);
-  border-radius: var(--radius-lg);
-  padding: 20px 24px;
-  margin-bottom: 28px;
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 28px;
 }
-.kb-header {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
-}
+@media (max-width: 480px) { .kb-section { padding: 16px; } }
+
+.kb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .kb-header-icon {
   width: 32px; height: 32px; border-radius: 8px;
-  background: rgba(201,168,76,0.12);
-  display: flex; align-items: center; justify-content: center;
+  background: rgba(53,60,138,0.12);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 .kb-header-icon svg { width: 16px; height: 16px; color: var(--gold); }
 .kb-title { font-size: 14px; font-weight: 600; color: var(--gold); }
@@ -225,8 +198,10 @@
 .kb-search-input {
   width: 100%; background: rgba(255,255,255,0.04);
   border: 1px solid var(--border2);
-  border-radius: var(--radius); padding: 11px 44px 11px 14px;
-  color: var(--text); font-family: inherit; font-size: 13px;
+  border-radius: var(--radius);
+  /* Mobile : padding tactile confortable */
+  padding: 13px 44px 13px 14px;
+  color: var(--text); font-family: inherit; font-size: 14px;
   outline: none; transition: border-color var(--transition);
 }
 .kb-search-input:focus { border-color: var(--gold); }
@@ -234,31 +209,25 @@
 .kb-search-btn {
   position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
   background: none; border: none; color: var(--text3); cursor: pointer;
-  padding: 4px; transition: color var(--transition);
+  padding: 8px; transition: color var(--transition);
 }
 .kb-search-btn:hover { color: var(--gold); }
 .kb-search-btn svg { width: 16px; height: 16px; }
 
 /* Résultats KB */
 .kb-results { margin-top: 14px; }
-.kb-no-result {
-  font-size: 13px; color: var(--text3); text-align: center; padding: 16px 0;
-}
+.kb-no-result { font-size: 13px; color: var(--text3); text-align: center; padding: 16px 0; }
 .kb-result-card {
-  background: rgba(201,168,76,0.04);
-  border: 1px solid rgba(201,168,76,0.2);
+  background: rgba(53,60,138,0.04); border: 1px solid rgba(53,60,138,0.15);
   border-radius: var(--radius); padding: 14px 16px;
   margin-bottom: 10px; cursor: pointer;
   transition: border-color var(--transition), background var(--transition);
 }
-.kb-result-card:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); }
-.kb-result-header {
-  display: flex; align-items: flex-start;
-  justify-content: space-between; gap: 10px; margin-bottom: 6px;
-}
+.kb-result-card:hover { border-color: var(--gold); background: rgba(53,60,138,0.08); }
+.kb-result-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
 .kb-result-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; }
 .kb-score {
-  font-size: 11px; color: var(--gold2); background: rgba(201,168,76,0.1);
+  font-size: 11px; color: var(--gold2); background: rgba(106,127,232,0.1);
   border-radius: 4px; padding: 2px 7px; flex-shrink: 0; white-space: nowrap;
 }
 .kb-result-problem { font-size: 12px; color: var(--text3); margin-bottom: 8px; line-height: 1.5; }
@@ -271,8 +240,6 @@
   text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
 }
 .kb-solution-text { font-size: 12px; color: var(--text2); line-height: 1.6; }
-.kb-result-footer {
-  display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap;
-}
+.kb-result-footer { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
 .kb-meta { font-size: 11px; color: var(--text3); }
 .kb-occ  { color: var(--gold2); font-weight: 500; }
