@@ -16,57 +16,63 @@ const { authMiddleware } = require('./middleware/auth');
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-// ── CORS (au cas où on utilise quand même Live Server) ─────────────
-app.use(cors({ origin: '*', methods: ['GET','POST','PUT','PATCH','DELETE'], allowedHeaders: ['Content-Type','Authorization'] }));
+// ── CORS ────────────────────────────────────────────────────────────
+app.use(cors({
+  origin: '*',
+  methods: ['GET','POST','PUT','PATCH','DELETE'],
+  allowedHeaders: ['Content-Type','Authorization']
+}));
+
 app.use(express.json());
 
 // ── SERVIR LE FRONTEND STATIQUE ────────────────────────────────────
-// Le dossier frontend/ est un niveau au-dessus du backend/
 const FRONTEND_PATH = path.join(__dirname, '..', 'frontend');
 app.use(express.static(FRONTEND_PATH));
 
-// Logger
+// Logger API
 app.use('/api', (req, res, next) => {
   console.log(`[${new Date().toLocaleTimeString('fr-FR')}] ${req.method} /api${req.path}`);
   next();
 });
 
 // ── ROUTES API ─────────────────────────────────────────────────────
-app.get('/api/health', (req, res) => res.json({ status: 'OK', timestamp: new Date() }));
+app.get('/api/health', (req, res) =>
+  res.json({ status: 'OK', timestamp: new Date() })
+);
+
 app.use('/api/auth',    authRoutes);
 app.use('/api/tickets', authMiddleware, ticketRoutes);
 app.use('/api/users',   authMiddleware, userRoutes);
 app.use('/api/ml',      authMiddleware, mlRoutes);
 
-// ── Fallback : toutes les routes non-API → index.html ──────────────
-app.get('*', (req, res) => {
-  // Si c'est une route API inconnue, retourner 404 JSON
+// ── FALLBACK (IMPORTANT FIX EXPRESS 5) ─────────────────────────────
+app.use((req, res) => {
+
+  // Si route API inconnue → JSON 404
   if (req.path.startsWith('/api/')) {
-    return res.status(404).json({ error: `Endpoint ${req.path} introuvable` });
+    return res.status(404).json({
+      error: `Endpoint ${req.path} introuvable`
+    });
   }
-  // Sinon servir le frontend
+
+  // Sinon → frontend
   res.sendFile(path.join(FRONTEND_PATH, 'index.html'));
 });
 
-// ── Erreurs ────────────────────────────────────────────────────────
+// ── ERREURS SERVEUR ────────────────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error('Erreur:', err.message);
   res.status(500).json({ error: 'Erreur interne du serveur' });
 });
 
-// ── Démarrage ──────────────────────────────────────────────────────
+// ── DÉMARRAGE ──────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log('');
   console.log('╔════════════════════════════════════════════════════════╗');
   console.log('║   ✓  EHU ORAN — Serveur démarré                       ║');
   console.log('╠════════════════════════════════════════════════════════╣');
-  console.log(`║   Ouvrir dans le navigateur :                          ║`);
-  console.log(`║   → http://localhost:${PORT}                              ║`);
-  console.log('║                                                        ║');
+  console.log(`║   http://localhost:${PORT}                              ║`);
   console.log('║   (Plus besoin de Live Server !)                       ║');
-  console.log('╠════════════════════════════════════════════════════════╣');
-  console.log('║   Médecin  : dr.karim@ehu-oran.dz    / med123         ║');
-  console.log('║   IT Admin : it.support@ehu-oran.dz  / it123          ║');
   console.log('╚════════════════════════════════════════════════════════╝');
   console.log('');
 });
