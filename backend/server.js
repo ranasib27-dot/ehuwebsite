@@ -1,6 +1,6 @@
 // ╔══════════════════════════════════════════════════════════════════╗
 // ║  server.js — Backend Express EHU Oran                            ║
-// ║  Sert AUSSI le frontend statique → une seule commande suffit     ║
+// ║  PRODUCTION READY (Render + Express 5 safe)                      ║
 // ╚══════════════════════════════════════════════════════════════════╝
 
 const express = require('express');
@@ -16,7 +16,9 @@ const { authMiddleware } = require('./middleware/auth');
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-// ── CORS ────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// CORS
+// ─────────────────────────────────────────────
 app.use(cors({
   origin: '*',
   methods: ['GET','POST','PUT','PATCH','DELETE'],
@@ -25,55 +27,63 @@ app.use(cors({
 
 app.use(express.json());
 
-// ── SERVIR LE FRONTEND STATIQUE ────────────────────────────────────
+// ─────────────────────────────────────────────
+// FRONTEND STATIC (React / HTML build)
+// ─────────────────────────────────────────────
 const FRONTEND_PATH = path.join(__dirname, '..', 'frontend');
 app.use(express.static(FRONTEND_PATH));
 
-// Logger API
+// ─────────────────────────────────────────────
+// LOGS API
+// ─────────────────────────────────────────────
 app.use('/api', (req, res, next) => {
-  console.log(`[${new Date().toLocaleTimeString('fr-FR')}] ${req.method} /api${req.path}`);
+  console.log(`[${new Date().toLocaleTimeString('fr-FR')}] ${req.method} ${req.originalUrl}`);
   next();
 });
 
-// ── ROUTES API ─────────────────────────────────────────────────────
-app.get('/api/health', (req, res) =>
-  res.json({ status: 'OK', timestamp: new Date() })
-);
+// ─────────────────────────────────────────────
+// API ROUTES
+// ─────────────────────────────────────────────
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date() });
+});
 
 app.use('/api/auth',    authRoutes);
 app.use('/api/tickets', authMiddleware, ticketRoutes);
 app.use('/api/users',   authMiddleware, userRoutes);
 app.use('/api/ml',      authMiddleware, mlRoutes);
 
-// ── FALLBACK FIX EXPRESS 5 (IMPORTANT) ─────────────────────────────
-// ⚠️ Remplace app.get('*') (qui casse sur Render / Express 5)
-
-app.get('/:path(*)', (req, res) => {
-  // Si API inconnue → 404 JSON
+// ─────────────────────────────────────────────
+// SPA FALLBACK (FIX EXPRESS 5 SAFE)
+// ─────────────────────────────────────────────
+app.use((req, res) => {
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({
-      error: `Endpoint ${req.path} introuvable`
+      error: `API endpoint not found: ${req.path}`
     });
   }
 
-  // Sinon → React frontend
   res.sendFile(path.join(FRONTEND_PATH, 'index.html'));
 });
 
-// ── ERREURS SERVEUR ────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// ERROR HANDLER
+// ─────────────────────────────────────────────
 app.use((err, req, res, next) => {
-  console.error('Erreur:', err.message);
-  res.status(500).json({ error: 'Erreur interne du serveur' });
+  console.error('Server Error:', err);
+  res.status(500).json({ error: 'Internal server error' });
 });
 
-// ── DÉMARRAGE ──────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// START SERVER
+// ─────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log('');
-  console.log('╔════════════════════════════════════════════════════════╗');
-  console.log('║   ✓  EHU ORAN — Serveur démarré                       ║');
-  console.log('╠════════════════════════════════════════════════════════╣');
-  console.log(`║   http://localhost:${PORT}                              ║`);
-  console.log('║   (Plus besoin de Live Server !)                       ║');
-  console.log('╚════════════════════════════════════════════════════════╝');
+  console.log('╔════════════════════════════════════════════╗');
+  console.log('║   ✓ EHU ORAN SERVER RUNNING               ║');
+  console.log('╠════════════════════════════════════════════╣');
+  console.log(`║   PORT: ${PORT}`);
+  console.log('║   STATUS: READY 🚀');
+  console.log('╚════════════════════════════════════════════╝');
   console.log('');
 });
