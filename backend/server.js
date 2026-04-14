@@ -45,17 +45,18 @@ app.use('/api/tickets', authMiddleware, ticketRoutes);
 app.use('/api/users',   authMiddleware, userRoutes);
 app.use('/api/ml',      authMiddleware, mlRoutes);
 
-// ── FALLBACK (IMPORTANT FIX EXPRESS 5) ─────────────────────────────
-app.use((req, res) => {
+// ── FALLBACK FIX EXPRESS 5 (IMPORTANT) ─────────────────────────────
+// ⚠️ Remplace app.get('*') (qui casse sur Render / Express 5)
 
-  // Si route API inconnue → JSON 404
+app.get('/:path(*)', (req, res) => {
+  // Si API inconnue → 404 JSON
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({
       error: `Endpoint ${req.path} introuvable`
     });
   }
 
-  // Sinon → frontend
+  // Sinon → React frontend
   res.sendFile(path.join(FRONTEND_PATH, 'index.html'));
 });
 
